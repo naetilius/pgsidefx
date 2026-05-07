@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.o
+*.so
+*.bc
+/tmp_check/

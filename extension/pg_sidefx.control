@@ -1,0 +1,5 @@
+comment = 'Deterministic, transaction-scoped database side-effect auditing'
+default_version = '1.0'
+module_pathname = '$libdir/pg_sidefx'
+relocatable = true
+trusted = true
