@@ -7,11 +7,12 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "rootDir": "src",
+    "types": ["node", "vitest/globals"],
+    "rootDir": "sdk/typescript",
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["sdk/typescript/**/*.ts"]
 }

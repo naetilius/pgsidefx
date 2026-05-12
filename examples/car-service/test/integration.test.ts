@@ -3,7 +3,7 @@ import pg from "pg";
 import { GenericContainer } from "testcontainers";
 import type { StartedTestContainer } from "testcontainers";
 import { CarService } from "../src/car-service";
-import { PgSideFx } from "../../../src";
+import { PgSideFx } from "../../../sdk/typescript";
 import { describe, it, beforeAll, afterAll, expect } from "vitest";
 
 describe("car-service integration example", () => {
@@ -14,7 +14,7 @@ describe("car-service integration example", () => {
     const repoRoot = path.join(__dirname, "..", "..", "..");
     const generic = await GenericContainer.fromDockerfile(
       repoRoot,
-      "Dockerfile",
+      "docker/Dockerfile",
     ).build();
 
     container = await generic

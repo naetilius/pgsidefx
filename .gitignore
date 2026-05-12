@@ -4,3 +4,4 @@ dist/
 *.so
 *.bc
 /tmp_check/
+sdk/rust/target/

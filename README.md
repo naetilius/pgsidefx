@@ -47,13 +47,23 @@ npm install
 npm test
 ```
 
-The integration tests use `testcontainers` and build from the repo `Dockerfile`.
+The integration tests use `testcontainers` and build from `docker/Dockerfile`.
+
+### Rust SDK and tests
+
+The Rust crate in [`sdk/rust/`](sdk/rust/) mirrors the TypeScript helpers (`expect_db_side_effects`, `summarize_db_side_effects`, GUCs, SQL assertion wrappers, and [`PgSideFx`](sdk/rust/src/client.rs) for a `deadpool-postgres` pool).
+
+```bash
+cd sdk/rust && cargo test
+```
+
+The Rust integration test requires Docker: it runs `docker build -f docker/Dockerfile` from the repository root (same Dockerfile as the Node tests), then runs the same scenario as [`examples/car-service/test/integration.test.ts`](examples/car-service/test/integration.test.ts) (`createCar flow with sidefx assertions`) against [`tests/car_service.rs`](sdk/rust/tests/car_service.rs) (a straight port of [`examples/car-service/src/car-service.ts`](examples/car-service/src/car-service.ts)).
 
 ---
 
 ## Core TypeScript APIs
 
-From `src/index.ts`:
+From [`sdk/typescript/index.ts`](sdk/typescript/index.ts):
 
 - `PgSideFx.init(pool, options?)`
   - OOP wrapper over `pg.Pool`
@@ -85,7 +95,7 @@ From `src/index.ts`:
 
 ```ts
 import pg from "pg";
-import { expectDbSideEffects } from "./src";
+import { expectDbSideEffects } from "./sdk/typescript";
 
 type Car = { id: number; personId: number; plate: string };
 class CarService {
@@ -148,7 +158,7 @@ async function testCreateCar() {
 ## Usage pattern: full structured report
 
 ```ts
-import { summarizeDbSideEffects } from "./src";
+import { summarizeDbSideEffects } from "./sdk/typescript";
 
 const report = await summarizeDbSideEffects(
   client,
@@ -208,9 +218,10 @@ These are applied with `SET LOCAL`, so they are transaction-scoped in wrapper AP
 ## Project layout
 
 - `extension/` - PostgreSQL extension SQL + C hook implementation
-- `src/` - TypeScript SDK/assertion layer
-- `src/sdk/` - SDK entrypoints for explicit SDK imports
-- `src/__tests__/integration.test.ts` - end-to-end integration tests
+- [`sdk/`](sdk/README.md) - TypeScript and Rust SDK entry layout
+- `sdk/typescript/` - TypeScript SDK/assertion layer (`index.ts`, `assertions.ts`, `sdk/` re-exports)
+- `sdk/typescript/__tests__/integration.test.ts` - TypeScript end-to-end integration tests
+- `sdk/rust/` - Rust SDK + Docker-backed integration test
 - `examples/car-service/src/` - example business API/service layer
 - `examples/car-service/test/` - example integration test using SideFx wrappers
 - `docs/unintended-side-effects.md` - behavior notes and capture model

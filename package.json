@@ -1,11 +1,17 @@
 {
-  "name": "pg_sidefx",
+  "name": "pgsidefx",
   "private": true,
   "version": "1.0.0",
   "scripts": {
     "test": "vitest run",
     "test:example": "vitest run examples/car-service/test/integration.test.ts",
-    "test:src": "vitest run src/__tests__/integration.test.ts"
+    "test:src": "vitest run sdk/typescript/__tests__/integration.test.ts",
+    "extension:build": "sh -c 'if command -v pg_config >/dev/null 2>&1; then make -C extension clean && make -C extension && make -C extension install; else echo \"pg_config not found; skipping local extension build (Docker build still compiles and installs extension).\"; fi'",
+    "docker:build": "docker build -f docker/Dockerfile -t pgsidefx:local .",
+    "docker:build:alpine": "docker build -f docker/Dockerfile.alpine -t pgsidefx:alpine .",
+    "clean": "make -C extension clean && rm -rf dist",
+    "build:all": "npm run extension:build && npm run docker:build",
+    "build:all:alpine": "npm run extension:build && npm run docker:build:alpine"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",

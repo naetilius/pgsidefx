@@ -38,10 +38,10 @@ describe("pg_sidefx (integration)", () => {
   let pool: pg.Pool;
 
   beforeAll(async () => {
-    const repoRoot = path.join(__dirname, "..", "..");
+    const repoRoot = path.join(__dirname, "..", "..", "..");
     const generic = await GenericContainer.fromDockerfile(
       repoRoot,
-      "Dockerfile",
+      "docker/Dockerfile",
     ).build();
 
     container = await generic

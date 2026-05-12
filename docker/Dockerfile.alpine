@@ -1,0 +1,18 @@
+FROM postgres:16-alpine AS builder
+
+RUN apk add --no-cache \
+	make \
+	gcc \
+	musl-dev \
+	clang19 \
+	llvm19
+
+COPY extension /extension
+WORKDIR /extension
+RUN make clean && make && make install
+
+FROM postgres:16-alpine
+
+COPY --from=builder /usr/local/lib/postgresql/pg_sidefx.so /usr/local/lib/postgresql/
+COPY --from=builder /usr/local/share/postgresql/extension/pg_sidefx.control /usr/local/share/postgresql/extension/
+COPY --from=builder /usr/local/share/postgresql/extension/pg_sidefx--1.0.sql /usr/local/share/postgresql/extension/

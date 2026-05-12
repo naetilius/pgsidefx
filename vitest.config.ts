@@ -6,7 +6,7 @@ export default defineConfig({
     testTimeout: 180_000,
     hookTimeout: 180_000,
     include: [
-      "src/__tests__/**/*.test.ts",
+      "sdk/typescript/__tests__/**/*.test.ts",
       "examples/**/test/**/*.test.ts",
     ],
   },
